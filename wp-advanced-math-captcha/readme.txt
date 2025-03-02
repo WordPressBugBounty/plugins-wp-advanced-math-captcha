@@ -2,8 +2,8 @@
 Contributors: AntiCaptcha
 Tags: antispam, capcha, captcha, spam, security, cf7, contact form 7
 Requires at least: 4.0
-Tested up to: 6.0
-Stable tag: 1.2.20
+Tested up to: 6.7.2
+Stable tag: 2.0.01
 License: MIT License
 License URI: http://opensource.org/licenses/MIT
 
@@ -28,6 +28,9 @@ For more information, check out the [plugin page]() or see the [Support Forum]()
 * .pot file for translations included
 * IP filtering (hides captcha for IP or subnet)
 * GEO filtering (hides captcha for selected trusted countries)
+* Limits & Restrictions by IP address or country, 
+* Auto IP Blocking prevents bots or malicious users from repeatedly guessing the captcha
+* Statistics & Logs (Today, Last week, 1/3/6/12 Months)
 
 == Installation ==
 

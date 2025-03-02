@@ -4,9 +4,11 @@
 	clear:both;
 }
 
+.math-captcha-form  .mathalert{color:#c62828}
+
 .login form .math-captcha-form span {
 	display: inline-block;
-	margin-bottom: 16px; 
+	margin-bottom: 10px; 
 }
 input[type="text"].mc-input {
 	display: inline-block;

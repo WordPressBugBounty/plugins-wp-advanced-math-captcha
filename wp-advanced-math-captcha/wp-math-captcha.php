@@ -2,7 +2,7 @@
 /*
 Plugin Name: WP Advanced Math Captcha
 Description: Math Captcha is a <strong>100% effective CAPTCHA for WordPress</strong> that integrates into login, registration, comments, Contact Form 7 and bbPress.
-Version: 1.2.20
+Version: 2.0.01
 Author: AntiCaptcha
 License: MIT License
 License URI: http://opensource.org/licenses/MIT
@@ -48,7 +48,7 @@ class Math_Captcha {
 	public $defaults = array(
 		'general'	 => array(
 			'enable_for'				 => array(
-				'login_form'			 => false,
+				'login_form'			 => true,
 				'registration_form'		 => true,
 				'reset_password_form'	 => true,
 				'comment_form'			 => true,
@@ -70,6 +70,23 @@ class Math_Captcha {
 			),
 			'time'						 => 300,
 			'deactivation_delete'		 => false,
+			'show_powered_by'		 => true,
+			'geo_db_autoupdate'		 => false,
+			'collect_logs'		 => true,
+			'geo_captcha_rules'		 => false,
+			'ip_rules'		 => false,
+			'ip_rules_list'		 => '',
+            'hide_for_countries'		 => array(),
+            
+			'block_ip_rules'		 => false,
+			'block_ip_rules_list'		 => '',
+            'enable_ip_auto_block'		 => false,
+			'max_number_attempts'		 => 5,
+			'lockout_period'		 => 10,
+            'block_geo_captcha_rules'		 => false,
+            'block_for_countries'		 => array(),
+			
+            
 			'flush_rules'				 => false
 		),
 		'version'	 => '1.2.20'
@@ -91,7 +108,7 @@ class Math_Captcha {
 	public function __construct() {
 		register_activation_hook( __FILE__, array( $this, 'activation' ) );
 		register_deactivation_hook( __FILE__, array( $this, 'deactivation' ) );
-
+        
 		// settings
 		$this->options = array(
 			'general' => array_merge( $this->defaults['general'], get_option( 'math_captcha_options', $this->defaults['general'] ) )
@@ -103,14 +120,20 @@ class Math_Captcha {
 		add_action( 'wp_enqueue_scripts', array( $this, 'frontend_comments_scripts_styles' ) );
 		add_action( 'login_enqueue_scripts', array( $this, 'frontend_comments_scripts_styles' ) );
         
-        
         add_action( 'admin_bar_menu', array( $this, 'modify_admin_bar'), 100 );
- 
-
+        
 
 		// filters
 		add_filter( 'plugin_action_links', array( $this, 'plugin_settings_link' ), 10, 2 );
 		add_filter( 'plugin_row_meta', array( $this, 'plugin_extend_links' ), 10, 2 );
+        
+        add_filter('cron_schedules', function($schedules) {
+            $schedules['monthly'] = [
+                'interval' => 2592000,
+                'display'  => 'Once Monthly'
+            ];
+            return $schedules;
+        });
 	}
     
     
@@ -130,7 +153,7 @@ class Math_Captcha {
     		'id'    => 'wpmc-toolbar-alerts',
     		'title' => 'Captcha Logs'.$counter_html,
     		'parent'=> false,
-    		'href' => admin_url('options-general.php?page=math-captcha'),
+    		'href' => admin_url('options-general.php?page=math-captcha&tab=logs'),
     	));
     }
     
@@ -188,6 +211,7 @@ class Math_Captcha {
 	public function deactivation() {
 		if ( $this->options['general']['deactivation_delete'] )
 			delete_option( 'math_captcha_options' );
+			delete_option( 'math_captcha_lic' );
 	}
 
 	/**

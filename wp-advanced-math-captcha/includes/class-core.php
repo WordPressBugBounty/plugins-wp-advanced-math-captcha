@@ -11,6 +11,46 @@ class Math_Captcha_Core {
 	public $login_failed = false;
 	public $error_messages;
 	public $errors;
+    
+    public static $PGP_private_key = '-----BEGIN PRIVATE KEY-----
+MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDn7tfBkLvzVpfK
+RKcDKqf32UPFFGa+Ql2gVKft2TZcSEqMrU/lhG8cdbM+6CDmNqMHjdF+bk6vdFZu
+ggu1Qefvnkj6PdMwTxiYcVasOJw7ead35J6odMrNrNZvL0n6qT6O6Pa/n5q3oyC3
+E3di2Xz04zYQt19RWUK57pD0hsFoPDyAkDOTptEl1EANR9C5GWOlBivVm/MuYLFC
+cWEGaAosQ6WUe2fhFx1xp8rOFSCdMIKzFx0LTae1QLWRKUZjn5jZZb3brZEc4k2Y
+e77GFGRe83hp12RRNC7ag5aV30rHcC3ggpfwM2Pv3q57/WwTfElhNYCG4p1X+2g/
+dFRBg2YVAgMBAAECggEAWygWiK94D5XzJr6A3c/AILu11RnFn/W5krBzKBp9MRwA
+oPXlNxIsEYV5I7pcY98JiIiG1ChKqM8SwXA/Zcg3fog5qpDuFkigJBo3tIyzavTP
+i2HBsfflVZ0e0qhFbU1jlwudH4d9abulug7el21fnWhH8Z4AyppIjYdkVZc5INv8
+WHoXI6IC3+M2MCyXpjACg0WKqaJil4pYSoRmINa3bzv4akrM3KldTjchVr8SfNlX
+bYK4mojd7hpAPApKYZS4B0OJXMKyGxXJyLPjtG9ry33AmZZ6z5W0Syh6l6BpsEm7
+EOOdPVXgCd7biN6MuzpLD1HUbVwo9wuJt4UlSibraQKBgQD6DlY8QSLEY1DWq71t
+2gDGx9rO35jvZC94IdRXNElEFjWIYJDcg5B27ugYU5JIU4LPbFRMwBPTlMYsOKyE
+6/j20QwE9nQaHjjtvw1iqjK5BrKot7dFnLFk7hr7xVZKQsB3pVSXUTL6N7DlpbbC
+6p8hK7CqtbycjFTvv6uAsawRgwKBgQDtcjjbVnrXcymGkSiryyme6x9q4h/BUh+7
+l/MzO5nKsrvswlhQu4sfhy1YS9/1Nchz0c0mEmbiyWTyRm75//BScaozBMoBC4Dg
+LCTUXQxNywJqXicnDY5g4hWov178+SIr/4Vm1zk1bLxKesemD5wJPnmHDRzL8xoM
+u9NGGhsOhwKBgHLQ2m/YSKp8H8YyHUyvaOPdKG8M5CAnlFRI1EMmUu3cdMAl9t4J
+2u+BSzjARs7G6a1sRFjpaTEhgs0TSMPPxgUuf6JXt3+2mNUxgGfpVlj25lnp4VEp
+XZrGacVpGvIGLHHDjE/ejNWvdJ49tOlS6bZFZV09DVmkZeufypPRAP0ZAoGBAL52
+RcciukyB0shfPal3wH36Cex5T5GJZ2zZeLoaz8T406cZSTARD4qNqsDNs+qEZrMI
+ki88yYyWkUOJXdFpDAOFq0lbSRHHgWvP3Qb/UDRCaECcH3nC9PcfwtHmF7KBwHhc
+cUxJzVjeTLbNf8HjeX0swNyklvm9maKnMtRjclqXAoGAapfPFr2mp2x3qsgSRtWj
+pn2GlBH+HITTvansslw5zRqgazqgGAz0jqgSI9Pexgle1kGi+qsZP6LhH02izMTv
++9NR73Ha3EdFAM24j7nDIql1Tup6P0OXtuDQmFfp8NhF7tiv114yJuXUsmyWKoE0
+huTrjWMBOSMPIwZLZXTE/7I=
+-----END PRIVATE KEY-----';
+
+    public static $PGP_private_key2 = '-----BEGIN PRIVATE KEY-----
+MIIBVQIBADANBgkqhkiG9w0BAQEFAASCAT8wggE7AgEAAkEAuMl40p3icj20wdl8
+MhIxhWrXnipwhqeCQX4AP1CbQDDabE+vVoL1BooASFSKTRNYSeIVcKXAVz7ZB3jv
+U86GMQIDAQABAkEAi1ueHDDoA0IYHQ25BUYFRNojzGuzO0n/CQdOhnFy9D/azvr7
+6nUPO96UnuIL+YPJxDxt3edZcgnfjeZXH3IUAQIhAOkzWHfthcfwHgn/ROmkRmXX
+dXJMqMJzXHiLRiRQKs1xAiEAytpom6czawptQ8eW1JuFelvPMtyGUNVugHRguFkh
+5MECIQCzptKo0VsWxGzf1sAIHn39Rxc7jsMTyjuawfCvWPMggQIgbPcNoi8ai7E6
+KGKaPvKbrLKMhoG3FMzRYucg3WXjswECIH6KY1eEGt/8HICzmEnlVr02EoUb1pEq
+mcibDkT4bBFj
+-----END PRIVATE KEY-----';
 
 	/**
 	 * 
@@ -32,31 +72,93 @@ class Math_Captcha_Core {
 
 	public function counter_add_alert() 
     {
-        $wp_content_dir = WP_CONTENT_DIR.'/uploads';
-        
-        $folder = $wp_content_dir.'/logs';
-        if (!file_exists($folder))
+        if (Math_Captcha()->options['general']['collect_logs'])
         {
-            mkdir($folder);
-            $fp = fopen($folder.'/.htaccess', 'w');
-            fwrite($fp, 'deny from all');
+            $wp_content_dir = WP_CONTENT_DIR.'/uploads';
+            
+            $folder = $wp_content_dir.'/logs';
+            if (!file_exists($folder))
+            {
+                mkdir($folder);
+                $fp = fopen($folder.'/.htaccess', 'w');
+                fwrite($fp, 'deny from all');
+                fclose($fp);
+            }
+            
+            $folder = $wp_content_dir.'/logs/mathcaptcha';
+            if (!file_exists($folder))
+            {
+                mkdir($folder);
+                $fp = fopen($folder.'/.htaccess', 'w');
+                fwrite($fp, 'deny from all');
+                fclose($fp);
+            }
+            
+            $file = $folder.'/'.date("Y-m-d").'.log';
+            $fp = fopen($file, 'a');
+            fwrite($fp, '0');
+            fclose($fp);
+            
+            $folder = $wp_content_dir.'/logs/mathcaptcha/sessions';
+            if (!file_exists($folder))
+            {
+                mkdir($folder);
+                $fp = fopen($folder.'/.htaccess', 'w');
+                fwrite($fp, 'deny from all');
+                fclose($fp);
+            }
+            
+            $file = $folder.'/'.date("Y-m-d").'.log';
+            $fp = fopen($file, 'a');
+            $ip = self::getClientIP();
+            $line = date("Y-m-d H:i:s").'|'.$ip.'|'.self::getClientCountry_byIP($ip)."\n";
+            fwrite($fp, $line);
             fclose($fp);
         }
-        
-        $folder = $wp_content_dir.'/logs/mathcaptcha';
-        if (!file_exists($folder))
-        {
-            mkdir($folder);
-            $fp = fopen($folder.'/.htaccess', 'w');
-            fwrite($fp, 'deny from all');
-            fclose($fp);
-        }
-        
-        $file = $folder.'/'.date("Y-m-d").'.log';
-        $fp = fopen($file, 'a');
-        fwrite($fp, '0');
-        fclose($fp);
 	}
+    
+    public function getClientCountry_byIP($ip) 
+    {
+        $geo = new MathCaptcha_GEO();
+        return $geo->getCountryByIP($ip);
+    }
+    
+    public static function getClientIP() 
+    {
+        // check Cloudflare
+        if (isset($_SERVER['HTTP_CF_CONNECTING_IP'])) {
+            return $_SERVER['HTTP_CF_CONNECTING_IP'];
+        }
+        
+        // Массив возможных заголовков для проверки
+        $headers = [
+            'HTTP_CLIENT_IP',
+            'HTTP_X_FORWARDED_FOR',
+            'HTTP_X_FORWARDED',    
+            'HTTP_X_CLUSTER_CLIENT_IP',
+            'HTTP_FORWARDED_FOR', 
+            'HTTP_FORWARDED',  
+            'REMOTE_ADDR' 
+        ];
+        
+        foreach ($headers as $header) {
+            if (isset($_SERVER[$header]) && !empty($_SERVER[$header])) {
+                $ip = $_SERVER[$header];
+                
+                if ($header === 'HTTP_X_FORWARDED_FOR' && strpos($ip, ',') !== false) {
+                    $ipList = explode(',', $ip);
+                    $ip = trim($ipList[0]);
+                }
+                
+                if (filter_var($ip, FILTER_VALIDATE_IP)) {
+                    return $ip;
+                }
+            }
+        }
+        
+        return 'Unknown';
+    }
+    
     
 	/**
 	 * Load defaults.
@@ -359,6 +461,282 @@ class Math_Captcha_Core {
 
 		return $redirect;
 	}
+    
+    public static function PrepareDomain($url) 
+    {
+        // Удаляем пробелы и приводим к нижнему регистру для единообразия
+        $url = trim(strtolower($url));
+        
+        // Если URL пустой, возвращаем false
+        if (empty($url)) {
+            return false;
+        }
+    
+        // Парсим URL с помощью встроенной функции
+        $parsed = parse_url($url);
+        
+        // Если не удалось распарсить или нет хоста, возвращаем false
+        if ($parsed === false || !isset($parsed['host'])) {
+            // Если нет протокола, пробуем добавить его и распарсить снова
+            if (strpos($url, '://') === false) {
+                $parsed = parse_url('http://' . $url);
+                if ($parsed === false || !isset($parsed['host'])) {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+    
+        $domain = $parsed['host'];
+    
+        // Удаляем 'www.' если есть
+        if (strpos($domain, 'www.') === 0) {
+            $domain = substr($domain, 4);
+        }
+    
+        return $domain;
+    }
+    
+    public static function generateUniqueKey($input, $segments = 4, $segmentLength = 8) 
+    {
+        $input = $input."|wp-advanced-math-captcha";
+        
+        // Hash the input string using a secure hash function
+        $hash = hash('sha256', $input);
+    
+        // Ensure we have enough characters to generate the key
+        while (strlen($hash) < $segments * $segmentLength) {
+            $hash .= hash('sha256', $hash); // Extend the hash if needed
+        }
+    
+        $uniqueKey = '';
+        $offset = 0;
+    
+        // Generate each segment and append it to the key
+        for ($i = 0; $i < $segments; $i++) {
+            if ($i > 0) {
+                $uniqueKey .= '-'; // Add a dash between segments
+            }
+    
+            // Take a substring of the desired segment length
+            $uniqueKey .= substr($hash, $offset, $segmentLength);
+            $offset += $segmentLength;
+        }
+    
+        return strtoupper($uniqueKey); // Return the key in uppercase for consistency
+    }
+    
+    // Send GET request to remote server
+    public static function grp_send_get_request($url) {
+        $args = array(
+            'timeout' => 10, // Request timeout
+            'headers' => array('Accept' => 'application/json') // Default headers
+        );
+        return wp_remote_get($url, $args); // Send GET request
+    }
+
+
+    public static function download_large_file_from_remote_server($url, $file_to_save) 
+    {
+        // Get the uploads directory
+        $full_destination = $file_to_save;
+    
+        // Check if the destination directory is writable
+        if (!is_writable(dirname($full_destination))) {
+            //error_log('Destination directory is not writable: ' . dirname($full_destination));
+            return new WP_Error('permission_error', 'Destination directory is not writable.');
+        }
+    
+        // Initialize WP_Filesystem
+        require_once(ABSPATH . 'wp-admin/includes/file.php');
+        WP_Filesystem();
+    
+        global $wp_filesystem;
+    
+        if (!$wp_filesystem) {
+            //error_log('WP_Filesystem initialization failed.');
+            return new WP_Error('filesystem_error', 'WP_Filesystem initialization failed.');
+        }
+    
+        // Initialize cURL for streaming
+        $ch = curl_init($url);
+        
+        // Open the destination file for writing (binary mode)
+        $dst = fopen($full_destination, 'wb');
+        
+        if ($dst === false) {
+            //error_log('Could not open destination file for writing: ' . $full_destination);
+            return new WP_Error('file_open_error', 'Could not open destination file.');
+        }
+    
+        // Set cURL options for streaming
+        curl_setopt($ch, CURLOPT_FILE, $dst);
+        curl_setopt($ch, CURLOPT_FAILONERROR, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_BINARYTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 300); // Increase timeout for large files (5 minutes)
+        curl_setopt($ch, CURLOPT_HEADER, false); // No headers in output
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true); // Verify SSL (security)
+        curl_setopt($ch, CURLOPT_USERAGENT, 'WordPress/' . get_bloginfo('version')); // Set a user agent
+    
+        // Execute cURL
+        $result = curl_exec($ch);
+    
+        if ($result === false) {
+            $error = curl_error($ch);
+            //error_log('cURL error downloading file: ' . $error);
+            fclose($dst);
+            curl_close($ch);
+            $wp_filesystem->delete($full_destination); // Clean up partial file
+            return new WP_Error('curl_error', 'Failed to download file: ' . $error);
+        }
+    
+        // Get file size and HTTP response code for verification
+        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $file_size = curl_getinfo($ch, CURLINFO_CONTENT_LENGTH_DOWNLOAD);
+    
+        curl_close($ch);
+        fclose($dst);
+    
+        if ($http_code != 200) {
+            //error_log('HTTP error downloading file: ' . $http_code);
+            $wp_filesystem->delete($full_destination); // Clean up partial file
+            return new WP_Error('http_error', 'HTTP error: ' . $http_code);
+        }
+    
+        // Verify the file was downloaded correctly (optional, based on size or checksum)
+        if ($file_size > 0 && filesize($full_destination) != $file_size) {
+            //error_log('File size mismatch: Expected ' . $file_size . ', got ' . filesize($full_destination));
+            $wp_filesystem->delete($full_destination); // Clean up partial file
+            return new WP_Error('file_size_error', 'File size mismatch.');
+        }
+    
+        // Log success and return the file path
+        //error_log('Large file successfully downloaded to: ' . $full_destination);
+        return true;
+    }
+    
+
+    public static function Update_GEO_database()
+    {
+        $domain = self::PrepareDomain(get_site_url());
+        $local_geo_file = dirname(__FILE__).'/geo.mmdb';
+        $upload_dir = wp_upload_dir();
+        $tmp_local_file = trailingslashit($upload_dir['path']) . '/geo.mmdb';
+        
+        $API_URL = 'https://api.cmsplughub.com/updater.php?unique_id=wp-advanced-math-captcha';
+        $API_URL .= '&file=geo.mmdb';
+        $API_URL .= '&domain='.$domain;
+        $API_URL .= '&md5='.md5_file($local_geo_file);
+        $url = esc_url_raw($API_URL);
+        
+        $result = self::download_large_file_from_remote_server($url, $tmp_local_file);
+        
+        if ($result !== true && is_wp_error($result))
+        {
+            add_settings_error('math_messages', 'grp_error', 'Request failed. '.$result->get_error_message(), 'error');
+            settings_errors('math_messages');
+            if (file_exists($tmp_local_file)) unlink($tmp_local_file);
+            return;
+        }
+        
+        // Check if downloaded file is json
+        if (filesize($tmp_local_file) < 102400)
+        {
+            // It's JSON
+            $json = (array)json_decode(file_get_contents($tmp_local_file), true);
+            if (isset($json['reason'])) $reason = $json['reason'];
+            else $reason = 'Unknown error. Invalid JSON GEO file';
+            
+            add_settings_error('math_messages', 'grp_error', 'Request failed. '.$reason, 'error');
+            settings_errors('math_messages');
+            if (file_exists($tmp_local_file)) unlink($tmp_local_file);
+            return;
+        }
+        
+        // Move new GEO file
+        unlink($local_geo_file);
+        copy($tmp_local_file, $local_geo_file);
+        unlink($tmp_local_file);
+        
+        add_settings_error('math_messages', 'grp_success', 'Request successful. GEO database is updated.', 'updated');
+        settings_errors('math_messages');
+    }
+
+
+
+    public static function RestorePurchase()
+    {
+        $domain = self::PrepareDomain(get_site_url());
+        $key = self::generateUniqueKey($domain);
+
+        $API_URL = 'https://api.cmsplughub.com/verify.php?unique_id=wp-advanced-math-captcha';
+        $API_URL .= '&domain='.$domain;
+        $API_URL .= '&license_key='.$key;
+        $url = esc_url_raw($API_URL);
+        
+        $response = self::grp_send_get_request($url);
+        if (is_wp_error($response)) {
+            add_settings_error('math_messages', 'grp_error', 'Request failed: ' . $response->get_error_message(), 'error');
+        } else {
+            $body = wp_remote_retrieve_body($response); // Get response body
+            
+            $json = (array)json_decode($body, true);
+            
+            if (isset($json['status']))
+            {
+                if ($json['status'] == 'error') add_settings_error('math_messages', 'grp_error', 'Request failed. Reason: '.$json['reason'], 'error');
+                else {
+                    // Save lic key
+                    $lic_key = trim(self::PGP_decrypt_content('O5LtBsEAzwSkNdyh2QIZ8kFy+hdTqZsxNK/DWGPPwhBSmVDBw/y+zkKAN97OtYPBgcdoDUMTuLWb8A9SUQ1lgw==', 2));
+                    update_option('math_captcha_lic', sanitize_text_field($json['lic_content']), 'yes');
+                    add_settings_error('math_messages', 'grp_success', 'Request successful. The license is installed. Please reload the page.', 'updated');
+                }
+            }
+            else add_settings_error('math_messages', 'grp_error', 'Request failed. Invalid answer from API. Contact support.', 'error');
+            
+            
+        }
+        
+        settings_errors('math_messages');
+    }
+    
+    
+    public static function isPRO()
+    {
+        $lic = get_option(trim(self::PGP_decrypt_content('Gh37vEZwf1N5jWDAVkDNylz7y8raWMvVSrx6N0qVsdRi34+hODzM3Cx750sWR540TMYaKx0Ex8h1xSMBOTYf4g==', 2)), false);
+
+        if ($lic === false) return false;
+        
+        $lic = self::PGP_decrypt_content($lic);
+
+        if ($lic === false) 
+        {
+            delete_option(trim(self::PGP_decrypt_content('Gh37vEZwf1N5jWDAVkDNylz7y8raWMvVSrx6N0qVsdRi34+hODzM3Cx750sWR540TMYaKx0Ex8h1xSMBOTYf4g==', 2)), false);
+            return false;
+        }
+        
+        $domain = self::PrepareDomain(get_site_url());
+        $key = self::generateUniqueKey($domain);
+        
+        $lic = (array)json_decode($lic, true);
+        
+        if ($domain == $lic['domain'] && $key == $lic['license_key']) return true;
+        
+        delete_option(trim(self::PGP_decrypt_content('Gh37vEZwf1N5jWDAVkDNylz7y8raWMvVSrx6N0qVsdRi34+hODzM3Cx750sWR540TMYaKx0Ex8h1xSMBOTYf4g==', 2)), false);
+        return false;
+    }
+    
+    public static function PGP_decrypt_content($encrypted_base64, $key = 0) 
+    {
+        $decrypted = '';
+        $encrypted_binary = base64_decode($encrypted_base64);
+        $k = ($key == 0) ? self::$PGP_private_key : self::$PGP_private_key2;
+        openssl_private_decrypt($encrypted_binary, $decrypted, $k);
+        
+        return $decrypted;
+    }
 
 	/**
 	 * Authenticate user.
@@ -452,12 +830,21 @@ class Math_Captcha_Core {
 
 		if ( ! empty( $captcha_title ) )
 			echo '
-			<label>' . $captcha_title . '<br/></label>';
+			<label>' . $captcha_title . '</label>';
 
 		echo '
 			<span>' . $this->generate_captcha_phrase( 'default' ) . '</span>
+            '.$this->generate_captcha_code().'
 		</p>';
+        
 	}
+    
+    public function generate_captcha_code() 
+    {
+        if (!defined('MATH_PLGLIC')) define( 'MATH_PLGLIC', Math_Captcha_Core::isPRO());
+        if (!MATH_PLGLIC) return '<style>.mathpwby{font-size:8px}</style><br><span class="mathpwby">Powered by <a target="_blank" href="https://wordpress.org/plugins/wp-advanced-math-captcha">MathCaptcha</a></span>';
+        else return '';
+    }
 
 	/**
 	 * Display and generate captcha for bbPress forms.
@@ -475,10 +862,11 @@ class Math_Captcha_Core {
 
 		if ( ! empty( $captcha_title ) )
 			echo '
-			<label>' . $captcha_title . '<br/></label>';
+			<label>' . $captcha_title . '</label>';
 
 		echo '
 			<span>' . $this->generate_captcha_phrase( 'bbpress' ) . '</span>
+            '.$this->generate_captcha_code().'
 		</p>';
 	}
 
@@ -595,6 +983,91 @@ class Math_Captcha_Core {
 			return ($reverse === false ? $words[$first] . $spacer . $words[$second] : $words[$second] . $spacer . $words[$first]);
 		}
 	}
+    
+    
+    public function get_last_ip_request_time($log_filename, $ip_to_check) 
+    {
+        $lines = self::get_last_log_lines($log_filename, 100);
+        
+        $last_time = false; // Store last timestamp for IP
+        foreach (array_reverse($lines) as $line) { // Check lines in reverse order (newest first)
+            $parts = explode('|', $line); // Split by delimiter
+
+            $ip = trim($parts[1]); // Extract IP
+            if ($ip === $ip_to_check) {
+                $time_str = trim($parts[0]); // Extract timestamp
+                
+                $last_time = strtotime($time_str);
+                if ($last_time) {
+                    return date('Y-m-d H:i:s', $last_time);
+                }
+            }
+            
+        }
+        return $last_time; // Return false if IP not found
+    }
+    
+    
+    public static function get_last_log_lines($file_path, $lines_count = 10, $buffer_size = 4096) {
+
+        if (!file_exists($file_path) || !is_readable($file_path)) {
+            return [];
+        }
+    
+        $fp = fopen($file_path, 'r');
+        if ($fp === false) {
+            return [];
+        }
+    
+        $lines = [];
+        $buffer = '';
+        $file_size = filesize($file_path);
+        $pos = $file_size;
+    
+
+        while (count($lines) < $lines_count && $pos > 0) {
+            
+            $read_size = min($buffer_size, $pos);
+            $pos -= $read_size;
+    
+            
+            fseek($fp, $pos);
+            $chunk = fread($fp, $read_size);
+            if ($chunk === false) {
+                break;
+            }
+    
+            
+            $buffer = $chunk . $buffer;
+    
+            
+            $new_lines = explode("\n", $buffer);
+            $buffer = array_shift($new_lines);
+    
+            
+            foreach (array_reverse($new_lines) as $line) {
+                $line = trim($line);
+                if ($line !== '' && count($lines) < $lines_count) {
+                    $lines[] = $line;
+                }
+            }
+        }
+    
+        
+        if ($buffer !== '' && count($lines) < $lines_count) {
+            $line = trim($buffer);
+            if ($line !== '') {
+                $lines[] = $line;
+            }
+        }
+    
+        fclose($fp);
+    
+        
+        return array_slice(array_reverse($lines), 0, $lines_count);
+    }
+    
+  
 
 	/**
 	 * Generate captcha phrase.
@@ -602,7 +1075,65 @@ class Math_Captcha_Core {
 	 * @param string $form
 	 * @return array
 	 */
-	public function generate_captcha_phrase( $form = '' ) {
+	public function generate_captcha_phrase( $form = '' ) 
+    {
+        if (!defined('MATH_PLGLIC')) define( 'MATH_PLGLIC', Math_Captcha_Core::isPRO());
+
+        $blockFlag = false;
+        if (Math_Captcha()->options['general']['block_ip_rules'])
+        {
+            $geo = new MathCaptcha_GEO();
+            if ($geo->checkIP_in_List(false, Math_Captcha()->options['general']['block_ip_rules_list'])) $blockFlag = true;
+        }
+        // Check GEO rules
+        if (MATH_PLGLIC && !$blockFlag && Math_Captcha()->options['general']['block_geo_captcha_rules'])
+        {
+            $geo = new MathCaptcha_GEO();
+            if (isset(Math_Captcha()->options['general']['block_for_countries'][ $geo->getCountryByIP(false) ])) $blockFlag = true;
+        }
+        
+        if (MATH_PLGLIC && !$blockFlag && Math_Captcha()->options['general']['enable_ip_auto_block'])
+        {
+            $ip = self::getClientIP();
+            $max_attempts = Math_Captcha()->options['general']['max_number_attempts'];
+            $lockout_period = Math_Captcha()->options['general']['lockout_period'];
+            
+            $folder = WP_CONTENT_DIR.'/uploads/logs/mathcaptcha/sessions'; 
+            if (file_exists($folder))
+            {
+                // today and yesterday
+                $files = array(
+                    $folder.'/'.date("Y-m-d").'.log',
+                    $folder.'/'.date("Y-m-d", mktime(0, 0, 0, date("m"),   date("d")-1,   date("Y"))).'.log',
+                );
+                
+                foreach ($files as $file)
+                {
+                    if ($blockFlag) break;
+                    
+                    if (file_exists($file))
+                    {
+                        $log_content = file_get_contents($file);
+                        
+                        $tmp = str_replace('|'.$ip.'|', "", $log_content, $count);
+                        if ($count >= $max_attempts)
+                        {
+                            $ip_datetime = $this->get_last_ip_request_time($file, $ip);
+                            if ($ip_datetime === false) continue;
+
+                            $ip_time = strtotime($ip_datetime);
+                            if (time() - $ip_time < $lockout_period * 60)  $blockFlag = true;
+                        }
+                    }
+                }
+
+            }
+            
+        }
+        if ($blockFlag) return '<span class="mathalert">'.__( 'Your IP or country is restricted from passing the captcha verification.', 'math-captcha' ).'</span>';
+
+        
+        
 		$ops = array(
 			'addition'		 => '+',
 			'subtraction'	 => '&#8722;',

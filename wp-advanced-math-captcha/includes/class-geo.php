@@ -121,6 +121,7 @@ class MathCaptcha_GEO
 	'FO' => "Faroe Islands",
 	'FR' => "France",
 	'GA' => "Gabon",
+	'UK' => "United Kingdom",
 	'GB' => "United Kingdom",
 	'GD' => "Grenada",
 	'GE' => "Georgia",
@@ -341,12 +342,38 @@ class MathCaptcha_GEO
 
     public function GetSessionIP()
     {
-        $ip_address = $_SERVER["REMOTE_ADDR"];
-        if (isset($_SERVER["HTTP_X_REAL_IP"]) && filter_var($_SERVER["HTTP_X_REAL_IP"], FILTER_VALIDATE_IP)) $ip_address = $_SERVER["HTTP_X_REAL_IP"];
-        if (isset($_SERVER["HTTP_X_FORWARDED_FOR"]) && filter_var($_SERVER["HTTP_X_FORWARDED_FOR"], FILTER_VALIDATE_IP)) $ip_address = $_SERVER["HTTP_X_FORWARDED_FOR"];
-        if (isset($_SERVER["HTTP_CF_CONNECTING_IP"]) && filter_var($_SERVER["HTTP_CF_CONNECTING_IP"], FILTER_VALIDATE_IP)) $ip_address = $_SERVER["HTTP_CF_CONNECTING_IP"];
-
-        return $ip_address;
+        // check Cloudflare
+        if (isset($_SERVER['HTTP_CF_CONNECTING_IP'])) {
+            return $_SERVER['HTTP_CF_CONNECTING_IP'];
+        }
+        
+        // Массив возможных заголовков для проверки
+        $headers = [
+            'HTTP_CLIENT_IP',
+            'HTTP_X_FORWARDED_FOR',
+            'HTTP_X_FORWARDED',    
+            'HTTP_X_CLUSTER_CLIENT_IP',
+            'HTTP_FORWARDED_FOR', 
+            'HTTP_FORWARDED',  
+            'REMOTE_ADDR' 
+        ];
+        
+        foreach ($headers as $header) {
+            if (isset($_SERVER[$header]) && !empty($_SERVER[$header])) {
+                $ip = $_SERVER[$header];
+                
+                if ($header === 'HTTP_X_FORWARDED_FOR' && strpos($ip, ',') !== false) {
+                    $ipList = explode(',', $ip);
+                    $ip = trim($ipList[0]);
+                }
+                
+                if (filter_var($ip, FILTER_VALIDATE_IP)) {
+                    return $ip;
+                }
+            }
+        }
+        
+        return 'Unknown';
     }
     
     public function checkIP_in_List($ipAddress, $list = array())
@@ -368,13 +395,15 @@ class MathCaptcha_GEO
                 	if ($ip_long >= ip2long($range[0]) && $ip_long <= ip2long($range[1])) return true;
                   
                 } else {
+                    if (strpos($rule_ip, '.*')) $rule_ip = str_replace(".*", "", $rule_ip);
+    
     				$tmp_i = stripos($ipAddress, $rule_ip);
     
     				if ( $tmp_i !== false && $tmp_i == 0) {
     					// match
     					return true;
-    				}
-    			}
+                    }
+                }
             }
             
         }
