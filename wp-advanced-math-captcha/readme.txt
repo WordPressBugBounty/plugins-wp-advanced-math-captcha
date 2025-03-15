@@ -1,147 +1,75 @@
 ﻿=== WP Advanced Math Captcha ===
 Contributors: AntiCaptcha
-Tags: antispam, capcha, captcha, spam, security, cf7, contact form 7
+Tags: antispam, captcha, security, woocommerce, contact-form-7
 Requires at least: 4.0
 Tested up to: 6.7.2
-Stable tag: 2.0.01
+Stable tag: 2.1
 License: MIT License
-License URI: http://opensource.org/licenses/MIT
+License URI: https://opensource.org/licenses/MIT
 
-Math Captcha is a 100% effective CAPTCHA for WordPress that integrates into login, registration, comments, Contact Form 7 and bbPress.
+Protect your WordPress site with a powerful and user-friendly Math Captcha. Now with seamless WooCommerce integration!
 
 == Description ==
 
-[Math Captcha]() is a 100% effective and easy to use CAPTCHA for WordPress that seamlessly integrates into login, registration, lost password, comments, bbPress and Contact Form 7.
+**WP Advanced Math Captcha** is a robust, 100% effective, and easy-to-use CAPTCHA solution designed to safeguard your WordPress site from spam and bots. With its new integration for **WooCommerce**, it now protects login, registration, password reset, comments, Contact Form 7, bbPress, and WooCommerce account forms — all in one lightweight plugin!
 
-For more information, check out the [plugin page]() or see the [Support Forum]().
+Say goodbye to annoying spam and hello to a secure, user-friendly experience. Whether you're running an e-commerce store, a blog, or a forum, this plugin offers customizable math-based challenges that are simple for humans but tough for bots.
 
-= Features include: =
+For more details, visit the [plugin page]() or explore the [Support Forum]().
 
-* Select where to use math captcha: login, registration and lost password forms, comments, Contact Form 7 and bbPress
-* Hiding captcha for logged in users
-* Select which mathematical operation to use
-* Displaying captcha as numbers and/or words
-* Multiple captcha on one page support
-* Block spambots direct access to wp-comments-post.php
-* Option to set captcha field title
-* Option to set captcha input time
-* .pot file for translations included
-* IP filtering (hides captcha for IP or subnet)
-* GEO filtering (hides captcha for selected trusted countries)
-* Limits & Restrictions by IP address or country, 
-* Auto IP Blocking prevents bots or malicious users from repeatedly guessing the captcha
-* Statistics & Logs (Today, Last week, 1/3/6/12 Months)
+### Key Features:
+- **New! WooCommerce Integration**: Secure login, registration, and password reset forms.
+- Protect multiple areas: WordPress login, registration, lost password, comments, Contact Form 7, and bbPress.
+- Hide CAPTCHA for logged-in users.
+- Choose mathematical operations (addition, subtraction, multiplication).
+- Display CAPTCHA as numbers, words, or both.
+- Support for multiple CAPTCHAs on a single page.
+- Block direct spambot access to `wp-comments-post.php`.
+- Customizable CAPTCHA field title and input time.
+- IP and GEO filtering: Hide CAPTCHA for trusted IPs or countries.
+- Auto IP blocking to stop repeated bot attempts.
+- Detailed statistics and logs (daily, weekly, monthly, yearly).
+- Translation-ready with included `.pot` file.
 
 == Installation ==
 
-1. Install Math Captcha either via the WordPress.org plugin directory, or by uploading the files to your server
-2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Go to the Math Captcha menu and set your captcha display settings.
+1. Install **WP Advanced Math Captcha** via the WordPress.org plugin directory or upload the files to your server.
+2. Activate the plugin through the 'Plugins' menu in WordPress.
+3. Navigate to the **Math Captcha** settings under the WordPress admin menu to configure your preferences.
 
 == Frequently Asked Questions ==
 
-= Q. I have a question =
+= Does this plugin work with WooCommerce? =
+Yes! The latest version includes full integration with WooCommerce, protecting checkout, login, registration, and password reset forms.
 
-A. Chances are, someone else has asked it. Check out the support forum at:
+= Is it effective against spam bots? =
+Absolutely! Our math-based CAPTCHA is 100% effective at blocking bots while remaining user-friendly for real visitors.
 
-== Screenshots ==
+= Can I customize the CAPTCHA? =
+Yes, you can choose the mathematical operation, display format (numbers or words), field title, and even set a time limit for input.
 
-1. screenshot-1.png
+= Does it support multiple forms on one page? =
+Yes, the plugin supports multiple CAPTCHAs on a single page, making it perfect for complex forms or multi-step processes.
+
+= Can I hide the CAPTCHA for specific users? =
+Yes! You can hide the CAPTCHA for logged-in users, specific IPs, or trusted countries using IP and GEO filtering.
+
+= How do I get support? =
+Check out our [Support Forum]() for answers to common questions or to ask your own. We're here to help!
 
 == Changelog ==
 
+= 2.1 =
+* Added WooCommerce integration for checkout, login, registration, and password reset forms.
+* Improved performance and compatibility with WordPress 6.7.2.
+* Enhanced statistics and logging features.
 
+= 2.0 =
+* Added IP and GEO filtering options.
+* Introduced auto IP blocking for repeated failed attempts.
 
-= 1.2.10 =
-* Fix: Call to undefined function wpcf7_add_form_tag
+= 1.0 =
+* Initial release with support for login, registration, comments, Contact Form 7, and bbPress.
 
-= 1.2.9 =
-* Fix: Potential vulnerability bugs
-* Tweak: Improve getting server host name for comment blocking
-
-= 1.2.8 =
-* Fix: Potential vulnerability bug
-
-* Tweak: Contact Form 7 compatibility
-
-= 1.2.7 =
-* Fix: Contact form 7 compatibility fix
-* Tweak: Removed local translation files in favor of WP repository translations.
-
-= 1.2.6 =
-* Fix: Contact form 7 compatibility fix
-
-= 1.2.5.1 =
-* Fix: Final fix for CF7
-
-= 1.2.5 =
-* Fix: Contact Form 7 validation issue, due to recent CF7 changes
-
-= 1.2.4 =
-* Tweak: Switch from wp_generate_password() to custom function due to Jetpack statistics DB calls issue
-* Fix: Undefined contant notice in plugin settings
-
-= 1.2.3 =
-* New: Romanian translation, thanks to [Robert M.]()
-
-= 1.2.2 =
-* New: Hebrew translation, thanks to [Ahrale Shrem]()
-
-= 1.2.1 =
-* New: Slovak translation, thanks to [Ján Fajčák]()
-
-= 1.2.0 =
-* Tweak: Added option to reset settings to defaults
-* Tweak: Code rewritten to singleton design pattern
-* Fix: Contact Form 7 compatibility issues
-* New: Option to donate this plugin :)
-
-= 1.1.1 =
-* Tweak: UI improvements for WordPress 3.8
-
-= 1.1.0 =
-* New: Option to block spambots direct access to wp-comments-post.php
-* New: Basic CSS styling of Math Captcha fields
-
-= 1.0.9 =
-* New: Multiple Math Captcha on one page support
-* New: Chinese translation, thanks to xiaoyaole
-* Fix: COntact Form 7 errors and general CF7 support
-* Tweak: crypt_key generation changed to AUTH_KEY usage
-
-= 1.0.8 =
-* Fix: Strict Standards warnings on some server setups.
-
-= 1.0.7 =
-* New: Italian translation, thanks to Alessandro Fiorotto
-
-= 1.0.6 =
-* New: Dutch translation, thanks to [Monique]()
-* New: French translation, thanks to sil3r
-
-= 1.0.5 =
-* New: Japanese translation, thanks to stranger-jp
-
-= 1.0.4 =
-* New: Russian translation, thanks to Valery Ryaboshapko
-
-= 1.0.3 =
-* New: German translation, thanks to Stephan Hilchenbach
-
-= 1.0.2 =
-* New: Option to delete plugin settings on deactivation
-* New: Persian translation by Ali Mirzaei
-* Fix: Captcha time expired error - thanks to Aaron and Simo 
-
-= 1.0.1 =
-* Fix: Math Captcha not available in Contact Form 7 if hide for logged in users selected
-* Fix: Captcha time expired error on bbPress 
-* Tweak: Empty captcha title
-
-= 1.0.0 =
-* Initial release
-
-== Upgrade Notice ==
-
-= 1.2.10 =
-* Fix: Call to undefined function wpcf7_add_form_tag
+== License ==
+This plugin is licensed under the MIT License. See the full license text in the plugin files for more details.

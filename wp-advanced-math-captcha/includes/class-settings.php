@@ -31,7 +31,11 @@ class Math_Captcha_Settings {
 			'reset_password_form'	 => __( 'reset password form', 'math-captcha' ),
 			'comment_form'			 => __( 'comment form', 'math-captcha' ),
 			'bbpress'				 => __( 'bbpress', 'math-captcha' ),
-			'contact_form_7'		 => __( 'contact form 7', 'math-captcha' )
+			'contact_form_7'		 => __( 'contact form 7', 'math-captcha' ),
+			'woocommerce_login'		 => __( 'woocommerce login', 'math-captcha' ),
+			'woocommerce_register'	 => __( 'woocommerce register', 'math-captcha' ),
+			'woocommerce_reset'	     => __( 'woocommerce reset', 'math-captcha' ),
+			//'woocommerce_checkout'	 => __( 'woocommerce checkout', 'math-captcha' )
 		);
 
 		$this->mathematical_operations = array(
@@ -67,6 +71,10 @@ class Math_Captcha_Settings {
         
         switch ($action)
         {
+            case 'cancel-key':
+                Math_Captcha_Core::isPRO(true);
+                break;
+                
             case 'restore-purchase':
                 Math_Captcha_Core::RestorePurchase();
                 break;
@@ -876,22 +884,72 @@ class Math_Captcha_Settings {
     
     
     
-	public function mc_general_enable_captcha_for($hidden = false) {
-		echo '
-		<div id="mc_general_enable_captcha_for" class="'.($hidden ? 'hidden' : '').'">
-			<fieldset>';
+public function mc_general_enable_captcha_for($hidden = false)
+    {
 
-		foreach ( $this->forms as $val => $trans ) {
-			echo '
-				<input id="mc-general-enable-captcha-for-' . $val . '" type="checkbox" name="math_captcha_options[enable_for][]" value="' . $val . '" ' . checked( true, Math_Captcha()->options['general']['enable_for'][$val], false ) . ' ' . disabled( (($val === 'contact_form_7' && ! class_exists( 'WPCF7_ContactForm' )) || ($val === 'bbpress' && ! class_exists( 'bbPress' )) ), true, false ) . '/><label for="mc-general-enable-captcha-for-' . $val . '">' . esc_html( $trans ) . '</label>'."<br>";
-		}
+        if (!defined('MATH_PLGLIC')) define('MATH_PLGLIC', Math_Captcha_Core::isPRO());
 
-		echo '
-				<br/>
-				<span class="description">' . __( 'Select where you\'d like to use Math Captcha.', 'math-captcha' ) . '</span>
-			</fieldset>
-		</div>';
-	}
+        echo '
+    <div id="mc_general_enable_captcha_for" class="' . ($hidden ? 'hidden' : '') . '">
+      <fieldset>';
+
+        foreach ($this->forms as $val => $trans)
+        {
+
+            $labels = array();
+            $is_disabled = false;
+            $is_available = true;
+            
+            switch ($val) {
+                case 'contact_form_7':
+                    $is_disabled = !class_exists('WPCF7_ContactForm');
+                    break;
+            
+                case 'bbpress':
+                    $is_disabled = !class_exists('bbpress');
+                    break;
+            
+                case 'woocommerce_login':
+                    if (!function_exists('is_plugin_active')) {
+                        include_once(ABSPATH . 'wp-admin/includes/plugin.php');
+                    }
+                    $is_disabled = !is_plugin_active('woocommerce/woocommerce.php');
+                    break;
+            
+                case 'woocommerce_register':
+                case 'woocommerce_reset':
+                    if (!function_exists('is_plugin_active')) {
+                        include_once(ABSPATH . 'wp-admin/includes/plugin.php');
+                    }
+                    $is_disabled = !is_plugin_active('woocommerce/woocommerce.php');
+                    
+                    if (!defined('MATH_PLGLIC') || !MATH_PLGLIC) $is_available = false;
+                    break;
+            }
+            
+            
+            if ($is_disabled) {
+                $labels[] = esc_html('Not Installed or active');
+            }
+            
+            if (!$is_available) {
+                $labels[] = esc_html('*PRO version*');
+                $is_disabled = true;
+            }
+            
+            $label = !empty($labels) ? " <b>(" . implode(" / ", $labels) . ")</b>" : '';
+
+            
+            echo '
+        <input id="mc-general-enable-captcha-for-' . $val . '" type="checkbox" name="math_captcha_options[enable_for][]" value="' . $val . '" ' . checked(true, Math_Captcha()->options['general']['enable_for'][$val], false) . ' ' . disabled($is_disabled, true, false) . '/><label for="mc-general-enable-captcha-for-' . $val . '">' . esc_html($trans) . $label . '</label>' . "<br>";
+        }
+
+        echo '
+        <br/>
+        <span class="description">' . __('Select where you\'d like to use Math Captcha.', 'math-captcha') . '</span>
+      </fieldset>
+    </div>';
+    }
 
 	public function mc_general_hide_for_logged_users($hidden = false) {
 		echo '
@@ -1231,7 +1289,11 @@ class Math_Captcha_Settings {
         // Version type
         
         if (MATH_PLGLIC) $plg_version = '<span class="gpd-success-label">PRO version</span>';
-        else $plg_version = 'Free<br><a target="_blank" href="https://www.cmsplughub.com/order?id=wp-advanced-math-captcha" class="button button-primary">Get PRO version</a>&nbsp;<a href="?page=math-captcha&tab=support&action=restore-purchase" class="button button-primary">Restore Purchase</a><br><span class="description">If you\'ve already acquired a paid license, please click the \'Restore Purchase\' button to activate it</span>';
+        else {
+            $user = wp_get_current_user();
+            $email = isset($user->user_email) ? $user->user_email : '';
+            $plg_version = 'Free<br><a target="_blank" href="https://www.cmsplughub.com/order?id=wp-advanced-math-captcha&website_url='.Math_Captcha_Core::PrepareDomain(get_site_url()).'&email='.$email.'" class="button button-primary">Get PRO version</a>&nbsp;<a href="?page=math-captcha&tab=support&action=restore-purchase" class="button button-primary">Restore Purchase</a><br><span class="description">If you\'ve already acquired a paid license, please click the \'Restore Purchase\' button to activate it</span>';
+        }
         
 		echo '
 		<div id="mc_general_pro_support" class="'.($hidden ? 'hidden' : '').'">';
