@@ -1439,7 +1439,7 @@ mcibDkT4bBFj
 
             $transient_name = 'cf7';
 
-            if (array_key_exists($this->session_number, Math_Captcha()->cookie_session->session_ids['multi']))
+            if (!is_null(Math_Captcha()->cookie_session->session_ids['multi']) && array_key_exists($this->session_number, Math_Captcha()->cookie_session->session_ids['multi']))
                 $session_id = Math_Captcha()->cookie_session->session_ids['multi'][$this->session_number];
             else
                 $session_id = '';
