@@ -35,7 +35,7 @@ class Math_Captcha_Settings {
 			'woocommerce_login'		 => __( 'woocommerce login', 'math-captcha' ),
 			'woocommerce_register'	 => __( 'woocommerce register', 'math-captcha' ),
 			'woocommerce_reset'	     => __( 'woocommerce reset', 'math-captcha' ),
-			//'woocommerce_checkout'	 => __( 'woocommerce checkout', 'math-captcha' )
+			'woocommerce_checkout'	 => __( 'woocommerce checkout', 'math-captcha' )
 		);
 
 		$this->mathematical_operations = array(
@@ -918,6 +918,7 @@ public function mc_general_enable_captcha_for($hidden = false)
             
                 case 'woocommerce_register':
                 case 'woocommerce_reset':
+                case 'woocommerce_checkout':
                     if (!function_exists('is_plugin_active')) {
                         include_once(ABSPATH . 'wp-admin/includes/plugin.php');
                     }

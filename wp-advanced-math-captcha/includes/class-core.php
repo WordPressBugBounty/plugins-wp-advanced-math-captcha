@@ -372,27 +372,67 @@ mcibDkT4bBFj
             }
 
             //beforepay
-            //add_action('woocommerce_review_order_before_payment', array($this, 'add_captcha_form'));
-            //add_filter('render_block_woocommerce/checkout-payment-block', array($this, 'wmc_render_pre_block'), 999, 1);
+            add_action('woocommerce_review_order_before_payment', array($this, 'add_captcha_form'));
+            add_filter('render_block_woocommerce/checkout-payment-block', array($this, 'wmc_render_pre_block'), 999, 1);
 
             //add_action('woocommerce_checkout_process', array($this, 'wmc_checkout_check'));
-            //add_action('woocommerce_store_api_checkout_update_order_from_request', array($this, 'wmc_checkout_block_check'),10, 2);
-            //add_action('woocommerce_loaded', array($this, 'wmc_register_endpoint_data'));
+            add_action('woocommerce_store_api_checkout_update_order_from_request', array($this, 'wmc_checkout_block_check'),10, 2);
+            add_action('woocommerce_loaded', array($this, 'wmc_register_endpoint_data'));
         }
     }
 
     function wmc_register_endpoint_data()
     {
+		woocommerce_store_api_register_endpoint_data(
+				array(
+				'endpoint'        => 'checkout',
+				'namespace'       => 'wmc',
+				'schema_callback' => function() {
+					return array(
+						'token' => array(
+							'description' => __( 'Math Captcha token.', 'wp-math-captcha' ),
+							'type'        => 'string',
+							'context'     => array()
+						),
+					);
+				},
+				)
+			);
     }
 
     function wmc_checkout_block_check($order, $request)
     {
+		$payment_data = json_decode(file_get_contents('php://input'),true);
+		
+		$extensions = $payment_data["extensions"];
+		if ( empty( $extensions ) ) {
+			throw new \Exception( __( 'Please complete the Math Captcha to verify that you are not a robot.', 'wp-math-captcha' ));
+		}
+		
+		$value = $extensions[ 'wmc' ];
+		if ( empty( $value ) ) {
+			throw new \Exception( __( 'Please complete the Math Captcha to verify that you are not a robot.', 'wp-math-captcha' ));
+		}
+		
+		$token = $value['token'];
+		
+		if (Math_Captcha()->cookie_session->session_ids['default'] !== '' && get_transient('mc_' . Math_Captcha()->cookie_session->session_ids['default']) !== false) {
+                if (strcmp(get_transient('mc_' . Math_Captcha()->cookie_session->session_ids['default']), sha1(AUTH_KEY . $token . Math_Captcha()->cookie_session->session_ids['default'], false)) !== 0) {
+                    $this->counter_add_alert();
+					throw new \Exception( __( 'Please complete the Math Captcha to verify that you are not a robot.', 'wp-math-captcha' ));
+                }
+            } else
+            {
+                $this->counter_add_alert();
+                throw new \Exception( __( 'Please complete the Math Captcha to verify that you are not a robot.', 'wp-math-captcha' ));
+            }
+			
         return $order;
     }
 
-    function wmc_checkout_check()
+/*     function wmc_checkout_check()
     {
-    }
+    } */
 
     function wmc_render_pre_block($block_content)
     {
