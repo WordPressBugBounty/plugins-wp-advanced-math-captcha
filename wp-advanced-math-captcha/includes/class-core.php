@@ -62,9 +62,11 @@ mcibDkT4bBFj
         Math_Captcha()->core = $this;
 
         // actions
+		add_action('wpforms_process_before', array($this, 'wmc_wpforms_validation'), 10, 2);
         add_action('init', array($this, 'load_actions_filters'), 1);
         add_action('plugins_loaded', array($this, 'load_defaults'));
         add_action('admin_init', array($this, 'flush_rewrites'));
+		add_action('admin_init', array($this,'wmc_install_dup'));
 
         // filters
         add_filter('shake_error_codes', array($this, 'add_shake_error_codes'), 1);
@@ -379,7 +381,52 @@ mcibDkT4bBFj
             add_action('woocommerce_store_api_checkout_update_order_from_request', array($this, 'wmc_checkout_block_check'),10, 2);
             add_action('woocommerce_loaded', array($this, 'wmc_register_endpoint_data'));
         }
+		
+		// WPForms
+		if (Math_Captcha()->options['general']['enable_for']['wpforms'] && in_array('wpforms-lite/wpforms.php', apply_filters('active_plugins', get_option('active_plugins')))) {
+			// Check IP rules
+            if (Math_Captcha()->options['general']['ip_rules']) {
+                $geo = new MathCaptcha_GEO();
+                if ($geo->checkIP_in_List(false, Math_Captcha()->options['general']['ip_rules_list'])) return; // Dont show captcha
+            }
+            // Check GEO rules
+            if (Math_Captcha()->options['general']['geo_captcha_rules']) {
+                $geo = new MathCaptcha_GEO();
+                if (isset(Math_Captcha()->options['general']['hide_for_countries'][$geo->getCountryByIP(false)])) return; // Dont show captcha
+            }
+			
+			add_action('wpforms_display_submit_before', array($this, 'add_wpforms_captcha_form'));
+		}
     }
+	
+	function wmc_get_database_entry_dup()
+	{
+		global $wpdb;
+		$records = $wpdb->get_results('SELECT * FROM ' . $this->wmc_table_name_dup(), ARRAY_A);
+		return $records;
+	}
+	
+	function wmc_wpforms_validation($entry, $form_data)
+	{
+		global $wpdb;
+		
+		$wpdb->query('DELETE FROM ' . $this->wmc_table_name_dup() . ' WHERE wmc_time < ' . (time() - 86400));
+				
+		if (!empty($_POST['mc-value'])) {
+			$mc_value = (int)$_POST['mc-value'];
+			
+		foreach($this->wmc_get_database_entry_dup() as $val){
+			
+			if (strcmp($val['wmc_secrets'], sha1(AUTH_KEY . $mc_value . $val['wmc_key'], false)) !== 0){
+				$this->counter_add_alert();
+                wpforms()->process->errors[$form_data['id']]['footer'] = esc_html__('Please complete the Math Captcha to verify that you are not a robot', 'wp-math-captcha');
+			}
+		}
+		} else {
+			$this->counter_add_alert();
+            wpforms()->process->errors[$form_data['id']]['footer'] = esc_html__('Please complete the Math Captcha to verify that you are not a robot', 'wp-math-captcha');
+		}
+	}
 
     function wmc_register_endpoint_data()
     {
@@ -429,10 +476,6 @@ mcibDkT4bBFj
 			
         return $order;
     }
-
-/*     function wmc_checkout_check()
-    {
-    } */
 
     function wmc_render_pre_block($block_content)
     {
@@ -1006,6 +1049,50 @@ mcibDkT4bBFj
             ' . $this->generate_captcha_code() . '
 		</p>';
     }
+	
+	public function add_wpforms_captcha_form()
+    {
+        if (is_admin())
+            return;
+
+        $captcha_title = apply_filters('math_captcha_title', Math_Captcha()->options['general']['title']);
+
+        echo '
+		<p class="math-captcha-form">';
+
+        if (!empty($captcha_title))
+            echo '
+			<label>' . $captcha_title . '</label>';
+
+        echo '
+			<span>' . $this->generate_captcha_phrase('wpforms') . '</span>
+            ' . $this->generate_captcha_code() . '
+		</p>';
+    }
+	
+	function wmc_table_name_dup()
+	{
+		global $wpdb;
+		return $wpdb->prefix . 'wmc';
+	}
+	
+	function wmc_install_dup()
+	{
+		global $wpdb;
+
+		$sql = 'CREATE TABLE IF NOT EXISTS ' . $this->wmc_table_name_dup() . ' (
+        wmc_key VARCHAR(190) NOT NULL,
+        wmc_secrets TEXT NOT NULL,
+        wmc_time INT(10) UNSIGNED NOT NULL,
+        PRIMARY KEY  (wmc_key),
+        KEY wmc_time (wmc_time)
+    )
+    ' . $wpdb->get_charset_collate();
+
+		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+		
+		maybe_create_table($this->wmc_table_name_dup(), $sql);
+	}
 
     public function generate_captcha_code()
     {
@@ -1258,6 +1345,8 @@ mcibDkT4bBFj
      */
     public function generate_captcha_phrase($form = '')
     {
+		global $wpdb;
+		
         if (!defined('MATH_PLGLIC')) define('MATH_PLGLIC', Math_Captcha_Core::isPRO());
 
         $blockFlag = false;
@@ -1449,7 +1538,7 @@ mcibDkT4bBFj
             }
         }
 
-        if (in_array($form, array('default', 'bbpress'), true)) {
+        if (in_array($form, array('default', 'bbpress','wpforms'), true)) {
             // position of empty input
             if ($rnd_input === 0)
                 $return = $input . ' ' . $number[3] . ' ' . $this->encode_operation($number[1]) . ' = ' . $this->encode_operation($number[2]);
@@ -1486,7 +1575,18 @@ mcibDkT4bBFj
 
             $this->session_number++;
         }
-
+		
+		if (in_array($form, array('wpforms'), true)) {
+			$wpdb->insert(
+				$this->wmc_table_name_dup(),
+				array(
+					'wmc_key' => $session_id,
+					'wmc_secrets' => sha1(AUTH_KEY . $number[$rnd_input] . $session_id, false),
+					'wmc_time' => time(),
+				)
+			);
+		}
+		
         set_transient($transient_name . '_' . $session_id, sha1(AUTH_KEY . $number[$rnd_input] . $session_id, false), apply_filters('math_captcha_time', Math_Captcha()->options['general']['time']));
 
         return $return;

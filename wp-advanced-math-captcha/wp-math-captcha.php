@@ -1,8 +1,8 @@
 <?php
 /*
 Plugin Name: WP Advanced Math Captcha
-Description: Math Captcha is a <strong>100% effective CAPTCHA for WordPress</strong> that integrates into login, registration, comments, Contact Form 7 and bbPress, woocommerce.
-Version: 2.1.2
+Description: Math Captcha is a <strong>100% effective CAPTCHA for WordPress</strong> that integrates into login, registration, comments, Contact Form 7 and bbPress, woocommerce, WPForms.
+Version: 2.1.3
 Author: AntiCaptcha
 License: MIT License
 License URI: http://opensource.org/licenses/MIT
@@ -33,6 +33,11 @@ include_once(MATH_CAPTCHA_PATH . 'includes/class-core.php');
 include_once(MATH_CAPTCHA_PATH . 'includes/class-settings.php');
 
 add_action("wp_enqueue_scripts", "wmc_script_enqueue");
+add_action('init', 'wmc_register_style');
+
+function wmc_register_style() {
+    wp_add_inline_script( 'wmc_script', 'const wmc_ajax_url = "' . admin_url('admin-ajax.php').'";', 'before' ); // Used for: WPForms, defines JS AJAX URL
+}
 
 function wmc_script_enqueue() {
 	wp_enqueue_script( 'wmc-js', plugins_url( '/js/wmc.js', __FILE__ ), array('jquery'), '1.0', array('strategy' => 'defer'));
@@ -60,7 +65,8 @@ class Math_Captcha {
 				'woocommerce_login'		 => false,
 				'woocommerce_register'	 => false,
 				'woocommerce_reset'	     => false,
-				'woocommerce_checkout'	 => false
+				'woocommerce_checkout'	 => false,
+				'wpforms'	 			 => false
 			),
 			'block_direct_comments'		 => false,
 			'hide_for_logged_users'		 => true,

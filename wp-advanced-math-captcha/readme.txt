@@ -2,8 +2,8 @@
 Contributors: AntiCaptcha
 Tags: antispam, captcha, security, woocommerce, contact-form-7
 Requires at least: 4.0
-Tested up to: 6.8
-Stable tag: 2.1.2
+Tested up to: 6.7.2
+Stable tag: 2.1.3
 License: MIT License
 License URI: https://opensource.org/licenses/MIT
 
@@ -18,8 +18,9 @@ Say goodbye to annoying spam and hello to a secure, user-friendly experience. Wh
 For more details, visit the [plugin page]() or explore the [Support Forum]().
 
 ### Key Features:
-- **New! WooCommerce Integration**: Secure login, registration, and password reset forms.
-- Protect multiple areas: WordPress login, registration, lost password, comments, Contact Form 7, and bbPress.
+- **New! WooCommerce Integration**: Secure checkout, login, registration, and password reset forms.
+- **New! WPForms Integration**
+- Protect multiple areas: WordPress login, registration, lost password, comments, Contact Form 7, bbPress and WPForms.
 - Hide CAPTCHA for logged-in users.
 - Choose mathematical operations (addition, subtraction, multiplication).
 - Display CAPTCHA as numbers, words, or both.
