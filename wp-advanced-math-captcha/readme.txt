@@ -2,8 +2,8 @@
 Contributors: AntiCaptcha
 Tags: antispam, captcha, security, woocommerce, contact-form-7
 Requires at least: 4.0
-Tested up to: 6.7.2
-Stable tag: 2.1.3
+Tested up to: 6.8
+Stable tag: 2.1.4
 License: MIT License
 License URI: https://opensource.org/licenses/MIT
 
