@@ -30,13 +30,14 @@ class Math_Captcha_Settings {
 			'registration_form'		 => __( 'registration form', 'math-captcha' ),
 			'reset_password_form'	 => __( 'reset password form', 'math-captcha' ),
 			'comment_form'			 => __( 'comment form', 'math-captcha' ),
-			'bbpress'				 => __( 'bbpress', 'math-captcha' ),
-			'contact_form_7'		 => __( 'contact form 7', 'math-captcha' ),
-			'woocommerce_login'		 => __( 'woocommerce login', 'math-captcha' ),
-			'woocommerce_register'	 => __( 'woocommerce register', 'math-captcha' ),
-			'woocommerce_reset'	     => __( 'woocommerce reset', 'math-captcha' ),
-			'woocommerce_checkout'	 => __( 'woocommerce checkout', 'math-captcha' ),
-			'wpforms'	 			 => __( 'wpforms', 'math-captcha' ),
+			'bbpress'				 => __( 'bbPress', 'math-captcha' ),
+			'contact_form_7'		 => __( 'Contact Form 7', 'math-captcha' ),
+			'woocommerce_login'		 => __( 'WooCommerce login', 'math-captcha' ),
+			'woocommerce_register'	 => __( 'WooCommerce register', 'math-captcha' ),
+			'woocommerce_reset'	     => __( 'WooCommerce reset', 'math-captcha' ),
+			'woocommerce_checkout'	 => __( 'WooCommerce checkout', 'math-captcha' ),
+			'wpforms'	 			 => __( 'WPForms', 'math-captcha' ),
+            'formidable_forms'       => __('Formidable Forms', 'math-captcha'),
 		);
 
 		$this->mathematical_operations = array(
@@ -936,7 +937,14 @@ public function mc_general_enable_captcha_for($hidden = false)
 					$is_disabled = !is_plugin_active('wpforms-lite/wpforms.php');
 					
 					//if (!defined('MATH_PLGLIC') || !MATH_PLGLIC) $is_available = false;
-				break;
+				    break;
+
+                case 'formidable_forms':
+                    if (!function_exists('is_plugin_active')) {
+                        include_once(ABSPATH . 'wp-admin/includes/plugin.php');
+                    }
+                    $is_disabled = !is_plugin_active('formidable/formidable.php');
+                    break;
             }
             
             
@@ -1144,9 +1152,11 @@ public function mc_general_enable_captcha_for($hidden = false)
 		foreach ( $countries as $country_code => $country_name ) 
         {
             if ($country_code == 'A1' || $country_code == 'A2' || $country_code == 'O1') continue;
-            
+
+            $is_checked = !empty( Math_Captcha()->options['general']['block_for_countries'][$country_code] );
+
 			echo '
-				<input '.(MATH_PLGLIC ? '' : 'disabled').' id="mc-general-block-for-countries-' . $country_code . '" type="checkbox" name="math_captcha_options[block_for_countries][]" value="' . $country_code . '" ' . checked( true, Math_Captcha()->options['general']['block_for_countries'][$country_code], false ) . '/><label for="mc-general-block-for-countries-' . $country_code . '">' . esc_html( $country_name ) . '</label>'."<br>";
+				<input '.(MATH_PLGLIC ? '' : 'disabled').' id="mc-general-block-for-countries-' . $country_code . '" type="checkbox" name="math_captcha_options[block_for_countries][]" value="' . $country_code . '" ' . checked( true, $is_checked, false ) . '/><label for="mc-general-block-for-countries-' . $country_code . '">' . esc_html( $country_name ) . '</label>'."<br>";
 		}
 
 		echo '

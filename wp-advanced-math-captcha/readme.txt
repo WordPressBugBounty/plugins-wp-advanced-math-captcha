@@ -1,26 +1,26 @@
 ﻿=== WP Advanced Math Captcha ===
 Contributors: AntiCaptcha
-Tags: antispam, captcha, security, woocommerce, contact-form-7
+Tags: antispam, captcha, security, woocommerce, contact-form-7, formidable-forms
 Requires at least: 4.0
 Tested up to: 6.8
-Stable tag: 2.1.4
+Stable tag: 2.1.6
 License: MIT License
 License URI: https://opensource.org/licenses/MIT
 
-Protect your WordPress site with a powerful and user-friendly Math Captcha. Now with seamless WooCommerce integration!
+Protect your WordPress site with a powerful and user-friendly Math Captcha. Now with seamless WooCommerce, WPForms, and Formidable Forms integration!
 
 == Description ==
 
-**WP Advanced Math Captcha** is a robust, 100% effective, and easy-to-use CAPTCHA solution designed to safeguard your WordPress site from spam and bots. With its new integration for **WooCommerce**, it now protects login, registration, password reset, comments, Contact Form 7, bbPress, and WooCommerce account forms — all in one lightweight plugin!
+**WP Advanced Math Captcha** is a robust, 100% effective, and easy-to-use CAPTCHA solution designed to safeguard your WordPress site from spam and bots. With its new integrations for **WooCommerce**, **WPForms**, and **Formidable Forms**, it now protects login, registration, password reset, comments, Contact Form 7, bbPress, WooCommerce account forms, WPForms, and Formidable Forms — all in one lightweight plugin!
 
-Say goodbye to annoying spam and hello to a secure, user-friendly experience. Whether you're running an e-commerce store, a blog, or a forum, this plugin offers customizable math-based challenges that are simple for humans but tough for bots.
+Say goodbye to annoying spam and hello to a secure, user-friendly experience. Whether you're running an e-commerce store, a blog, a forum, or a custom form-powered site, this plugin offers customizable math-based challenges that are simple for humans but tough for bots.
 
-For more details, visit the [plugin page]() or explore the [Support Forum]().
 
 ### Key Features:
 - **New! WooCommerce Integration**: Secure checkout, login, registration, and password reset forms.
-- **New! WPForms Integration**
-- Protect multiple areas: WordPress login, registration, lost password, comments, Contact Form 7, bbPress and WPForms.
+- **New! WPForms Integration**: Protect WPForms with math-based CAPTCHA.
+- **New! Formidable Forms Integration**: Secure Formidable Forms (Lite and Pro) with customizable CAPTCHA.
+- Protect multiple areas: WordPress login, registration, lost password, comments, Contact Form 7, bbPress, WPForms, and Formidable Forms.
 - Hide CAPTCHA for logged-in users.
 - Choose mathematical operations (addition, subtraction, multiplication).
 - Display CAPTCHA as numbers, words, or both.
@@ -43,6 +43,9 @@ For more details, visit the [plugin page]() or explore the [Support Forum]().
 = Does this plugin work with WooCommerce? =
 Yes! The latest version includes full integration with WooCommerce, protecting checkout, login, registration, and password reset forms.
 
+= Does this plugin work with Formidable Forms? =
+Yes! The plugin now supports Formidable Forms (Lite and Pro), adding math-based CAPTCHA protection to your forms.
+
 = Is it effective against spam bots? =
 Absolutely! Our math-based CAPTCHA is 100% effective at blocking bots while remaining user-friendly for real visitors.
 
@@ -60,8 +63,14 @@ Check out our [Support Forum]() for answers to common questions or to ask your o
 
 == Changelog ==
 
+= 2.1.6 =
+* Added Formidable Forms integration for both Lite and Pro versions, protecting forms with math-based CAPTCHA.
+* Improved validation for Formidable Forms to ensure robust spam protection.
+* Updated documentation and settings to include Formidable Forms support.
+
 = 2.1 =
 * Added WooCommerce integration for checkout, login, registration, and password reset forms.
+* Added WPForms integration for form protection.
 * Improved performance and compatibility with WordPress 6.7.2.
 * Enhanced statistics and logging features.
 

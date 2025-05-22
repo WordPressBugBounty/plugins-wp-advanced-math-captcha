@@ -2,7 +2,7 @@
 /*
 Plugin Name: WP Advanced Math Captcha
 Description: Math Captcha is a <strong>100% effective CAPTCHA for WordPress</strong> that integrates into login, registration, comments, Contact Form 7 and bbPress, woocommerce, WPForms.
-Version: 2.1.4
+Version: 2.1.6
 Author: AntiCaptcha
 License: MIT License
 License URI: http://opensource.org/licenses/MIT
@@ -66,7 +66,8 @@ class Math_Captcha {
 				'woocommerce_register'	 => false,
 				'woocommerce_reset'	     => false,
 				'woocommerce_checkout'	 => false,
-				'wpforms'	 			 => false
+				'wpforms'	 			 => false,
+                'formidable_forms' => false // Add Formidable Forms Lite
 			),
 			'block_direct_comments'		 => false,
 			'hide_for_logged_users'		 => true,

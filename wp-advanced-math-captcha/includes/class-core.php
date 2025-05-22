@@ -397,7 +397,71 @@ mcibDkT4bBFj
 			
 			add_action('wpforms_display_submit_before', array($this, 'add_wpforms_captcha_form'));
 		}
+
+        // Formidable Forms
+        if (Math_Captcha()->options['general']['enable_for']['formidable_forms'] && in_array('formidable/formidable.php', apply_filters('active_plugins', get_option('active_plugins')))) {
+            // Check IP rules
+            if (Math_Captcha()->options['general']['ip_rules']) {
+                $geo = new MathCaptcha_GEO();
+                if ($geo->checkIP_in_List(false, Math_Captcha()->options['general']['ip_rules_list'])) return; // Don't show captcha
+            }
+            // Check GEO rules
+            if (Math_Captcha()->options['general']['geo_captcha_rules']) {
+                $geo = new MathCaptcha_GEO();
+                if (isset(Math_Captcha()->options['general']['hide_for_countries'][$geo->getCountryByIP(false)])) return; // Don't show captcha
+            }
+
+            add_action('frm_submit_button', array($this, 'add_formidable_captcha_form'), 10, 2);
+            add_filter('frm_validate_entry', array($this, 'validate_formidable_captcha'), 10, 2);
+        }
     }
+
+    // Method to display captcha in Formidable Forms (unchanged)
+    public function add_formidable_captcha_form($submit, $form) {
+        if (is_admin())
+            return $submit;
+
+        $captcha_title = apply_filters('math_captcha_title', Math_Captcha()->options['general']['title']);
+
+        $output = '<p class="math-captcha-form">';
+        if (!empty($captcha_title)) {
+            $output .= '<label>' . esc_html($captcha_title) . '</label>';
+        }
+        $output .= '<span>' . $this->generate_captcha_phrase('formidable') . '</span>';
+        $output .= $this->generate_captcha_code();
+        $output .= '</p>';
+
+        echo $output;
+        return $submit;
+    }
+
+    // Updated method to validate captcha in Formidable Forms
+    public function validate_formidable_captcha($errors, $values) {
+        // Debug: Log to check if validation is triggered
+        // error_log('Formidable Forms validation triggered: ' . print_r($_POST, true));
+
+        $session_id = Math_Captcha()->cookie_session->session_ids['default'];
+
+        if (empty($_POST['mc-value'])) {
+            $this->counter_add_alert();
+            $errors['math-captcha'] = $this->error_messages['fill'];
+        } else {
+            $mc_value = (int)$_POST['mc-value'];
+
+            if ($session_id !== '' && get_transient('frm_' . $session_id) !== false) {
+                if (strcmp(get_transient('frm_' . $session_id), sha1(AUTH_KEY . $mc_value . $session_id, false)) !== 0) {
+                    $this->counter_add_alert();
+                    $errors['math-captcha'] = $this->error_messages['wrong'];
+                }
+            } else {
+                $this->counter_add_alert();
+                $errors['math-captcha'] = $this->error_messages['time'];
+            }
+        }
+
+        return $errors;
+    }
+
 	
 	function wmc_get_database_entry_dup()
 	{
@@ -1586,6 +1650,20 @@ mcibDkT4bBFj
 				)
 			);
 		}
+
+        if ($form === 'formidable') {
+            // Position of empty input
+            if ($rnd_input === 0) {
+                $return = $input . ' ' . $number[3] . ' ' . $this->encode_operation($number[1]) . ' = ' . $this->encode_operation($number[2]);
+            } elseif ($rnd_input === 1) {
+                $return = $this->encode_operation($number[0]) . ' ' . $number[3] . ' ' . $input . ' = ' . $this->encode_operation($number[2]);
+            } elseif ($rnd_input === 2) {
+                $return = $this->encode_operation($number[0]) . ' ' . $number[3] . ' ' . $this->encode_operation($number[1]) . ' = ' . $input;
+            }
+
+            $transient_name = 'frm';
+            $session_id = Math_Captcha()->cookie_session->session_ids['default'];
+        }
 		
         set_transient($transient_name . '_' . $session_id, sha1(AUTH_KEY . $number[$rnd_input] . $session_id, false), apply_filters('math_captcha_time', Math_Captcha()->options['general']['time']));
 
