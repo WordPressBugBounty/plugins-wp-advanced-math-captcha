@@ -322,7 +322,7 @@ mcibDkT4bBFj
                 if (isset(Math_Captcha()->options['general']['hide_for_countries'][$geo->getCountryByIP(false)])) return; // Dont show captcha
             }
 
-            add_action('woocommerce_login_form', array($this, 'add_captcha_form'));
+            add_action('woocommerce_login_form', array($this, 'add_woo_login_captcha_form'));
             add_action('authenticate', array($this, 'authenticate_user'), 1000, 3);
         }
 
@@ -1008,35 +1008,80 @@ mcibDkT4bBFj
      */
     public function authenticate_user($user, $username, $password)
     {
-        // user gave us valid login and password
-        if (!is_wp_error($user)) {
-            if (!empty($_POST)) {
-                if (!empty($_POST['mc-value'])) {
-                    $mc_value = (int)$_POST['mc-value'];
+		
+		$enable_login_form = Math_Captcha()->options['general']['enable_for']['login_form'] ?? false;
+		$enable_woo_login  = Math_Captcha()->options['general']['enable_for']['woocommerce_login'] ?? false;
+		
+		if(isset($_POST['woocommerce-login-nonce']) && $enable_woo_login) {
+				// user gave us valid login and password
+			if (!is_wp_error($user)) {
+				if (!empty($_POST)) {
+					if (!empty($_POST['mc-value'])) {
+						$mc_value = (int)$_POST['mc-value'];
 
-                    if (Math_Captcha()->cookie_session->session_ids['default'] !== '' && get_transient('mc_' . Math_Captcha()->cookie_session->session_ids['default']) !== false) {
-                        if (strcmp(get_transient('mc_' . Math_Captcha()->cookie_session->session_ids['default']), sha1(AUTH_KEY . $mc_value . Math_Captcha()->cookie_session->session_ids['default'], false)) !== 0)
-                            $error = 'wrong';
-                    } else
-                        $error = 'time';
-                } else
-                    $error = 'fill';
-            }
+						if (Math_Captcha()->cookie_session->session_ids['default'] !== '' && get_transient('woologin_' . Math_Captcha()->cookie_session->session_ids['default']) !== false) {
+							if (strcmp(get_transient('woologin_' . Math_Captcha()->cookie_session->session_ids['default']), sha1(AUTH_KEY . $mc_value . Math_Captcha()->cookie_session->session_ids['default'], false)) !== 0){
+								$error = 'wrong';
+							}
+						} else {
+							$error = 'time';
+						}
+					} else {
+						$error = 'fill';
+					}
+				}
 
-            if (!empty($error)) {
-                // destroy cookie
-                wp_clear_auth_cookie();
+				if (!empty($error)) {
+					// destroy cookie
+					wp_clear_auth_cookie();
 
-                $user = new WP_Error();
-                $this->counter_add_alert();
-                $user->add('math-captcha-error', $this->error_messages[$error]);
+					$user = new WP_Error();
+					$this->counter_add_alert();
+					$user->add('math-captcha-error', $this->error_messages[$error]);
 
-                // inform redirect function that we failed to login
-                $this->login_failed = true;
-            }
-        }
+					// inform redirect function that we failed to login
+					$this->login_failed = true;
+				}
+			}
 
-        return $user;
+			return $user;
+				
+		} else if ( $enable_login_form ) {
+				// user gave us valid login and password				
+			if (!is_wp_error($user)) {
+				if (!empty($_POST)) {
+					if (!empty($_POST['mc-value'])) {
+						$mc_value = (int)$_POST['mc-value'];
+
+						if (Math_Captcha()->cookie_session->session_ids['default'] !== '' && get_transient('mc_' . Math_Captcha()->cookie_session->session_ids['default']) !== false) {
+							if (strcmp(get_transient('mc_' . Math_Captcha()->cookie_session->session_ids['default']), sha1(AUTH_KEY . $mc_value . Math_Captcha()->cookie_session->session_ids['default'], false)) !== 0)
+								$error = 'wrong';
+						} else
+							$error = 'time';
+					} else
+						$error = 'fill';
+				}
+
+				if (!empty($error)) {
+					// destroy cookie
+					wp_clear_auth_cookie();
+
+					$user = new WP_Error();
+					$this->counter_add_alert();
+					$user->add('math-captcha-error', $this->error_messages[$error]);
+
+					// inform redirect function that we failed to login
+					$this->login_failed = true;
+				}
+			}
+
+			return $user;
+			
+		} else {
+			
+			return $user;
+			
+		}
     }
 
     /**
@@ -1110,6 +1155,26 @@ mcibDkT4bBFj
 
         echo '
 			<span>' . $this->generate_captcha_phrase('default') . '</span>
+            ' . $this->generate_captcha_code() . '
+		</p>';
+    }
+	
+	public function add_woo_login_captcha_form()
+    {
+        if (is_admin())
+            return;
+
+        $captcha_title = apply_filters('math_captcha_title', Math_Captcha()->options['general']['title']);
+
+        echo '
+		<p class="math-captcha-form">';
+
+        if (!empty($captcha_title))
+            echo '
+			<label>' . $captcha_title . '</label>';
+
+        echo '
+			<span>' . $this->generate_captcha_phrase('woo_login') . '</span>
             ' . $this->generate_captcha_code() . '
 		</p>';
     }
@@ -1650,6 +1715,18 @@ mcibDkT4bBFj
 				)
 			);
 		}
+		
+		if ($form === 'woo_login') {
+            if ($rnd_input === 0)
+                $return = $input . ' ' . $number[3] . ' ' . $this->encode_operation($number[1]) . ' = ' . $this->encode_operation($number[2]);
+            elseif ($rnd_input === 1)
+                $return = $this->encode_operation($number[0]) . ' ' . $number[3] . ' ' . $input . ' = ' . $this->encode_operation($number[2]);
+            elseif ($rnd_input === 2)
+                $return = $this->encode_operation($number[0]) . ' ' . $number[3] . ' ' . $this->encode_operation($number[1]) . ' = ' . $input;
+
+            $transient_name = 'woologin';
+            $session_id = Math_Captcha()->cookie_session->session_ids['default'];
+        }
 
         if ($form === 'formidable') {
             // Position of empty input
