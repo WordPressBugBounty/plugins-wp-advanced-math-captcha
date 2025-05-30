@@ -3,7 +3,7 @@ Contributors: AntiCaptcha
 Tags: antispam, captcha, security, woocommerce, contact-form-7, formidable-forms
 Requires at least: 4.0
 Tested up to: 6.8
-Stable tag: 2.1.7
+Stable tag: 2.1.8
 License: MIT License
 License URI: https://opensource.org/licenses/MIT
 
@@ -17,10 +17,10 @@ Say goodbye to annoying spam and hello to a secure, user-friendly experience. Wh
 
 
 ### Key Features:
-- **New! WooCommerce Integration**: Secure checkout, login, registration, and password reset forms.
+- **New! WooCommerce Integration**: Secure checkout, login, registration, and password reset forms (tested on works well on WooCommerce ver.9.8.5)
 - **New! WPForms Integration**: Protect WPForms with math-based CAPTCHA.
 - **New! Formidable Forms Integration**: Secure Formidable Forms (Lite and Pro) with customizable CAPTCHA.
-- Protect multiple areas: WordPress login, registration, lost password, comments, Contact Form 7, bbPress, WPForms, and Formidable Forms.
+- Protect multiple areas: WordPress login, registration, lost password, comments, Contact Form 7, bbPress, WPForms, and Formidable Forms
 - Hide CAPTCHA for logged-in users.
 - Choose mathematical operations (addition, subtraction, multiplication).
 - Display CAPTCHA as numbers, words, or both.
