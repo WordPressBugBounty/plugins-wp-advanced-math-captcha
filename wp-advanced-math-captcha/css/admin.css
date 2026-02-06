@@ -288,3 +288,13 @@ Messages
         text-overflow: clip; /* No ellipsis on mobile */
     }
 }
+
+/* Admin bar icon */
+#wpadminbar #wp-admin-bar-wpmc-toolbar-alerts .ab-icon:before {
+	content: "\f238";
+	top: 2px;
+}
+
+#wpadminbar #wp-admin-bar-wpmc-toolbar-alerts .ab-label {
+	margin-left: 5px;
+}

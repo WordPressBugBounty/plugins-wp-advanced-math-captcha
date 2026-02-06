@@ -2,8 +2,8 @@
 Contributors: AntiCaptcha
 Tags: antispam, captcha, security, woocommerce, contact-form-7, formidable-forms
 Requires at least: 4.0
-Tested up to: 6.8.1
-Stable tag: 2.1.8
+Tested up to: 6.8.3
+Stable tag: 2.1.9
 License: MIT License
 License URI: https://opensource.org/licenses/MIT
 

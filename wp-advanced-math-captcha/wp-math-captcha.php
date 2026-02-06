@@ -2,7 +2,7 @@
 /*
 Plugin Name: WP Advanced Math Captcha
 Description: Math Captcha is a <strong>100% effective CAPTCHA for WordPress</strong> that integrates into login, registration, comments, Contact Form 7 and bbPress, woocommerce, WPForms.
-Version: 2.1.8
+Version: 2.1.9
 Author: AntiCaptcha
 License: MIT License
 License URI: http://opensource.org/licenses/MIT
@@ -31,6 +31,7 @@ include_once(MATH_CAPTCHA_PATH . 'includes/class-cookie-session.php');
 include_once(MATH_CAPTCHA_PATH . 'includes/class-update.php');
 include_once(MATH_CAPTCHA_PATH . 'includes/class-core.php');
 include_once(MATH_CAPTCHA_PATH . 'includes/class-settings.php');
+include_once(MATH_CAPTCHA_PATH . 'includes/advert-test-codes.php');
 
 add_action("wp_enqueue_scripts", "wmc_script_enqueue");
 add_action('init', 'wmc_register_style');
@@ -103,7 +104,7 @@ class Math_Captcha {
             
 			'flush_rules'				 => false
 		),
-		'version'	 => '2.1.8'
+		'version'	 => '2.1.9'
 	);
 
 	public static function instance() {
@@ -165,7 +166,7 @@ class Math_Captcha {
         // Get alerts for today
     	$wp_admin_bar->add_menu( array(
     		'id'    => 'wpmc-toolbar-alerts',
-    		'title' => 'Captcha Logs'.$counter_html,
+    		'title' => '<span class="ab-icon dashicons dashicons-chart-line"></span><span class="ab-label">Captcha Logs'.$counter_html.'</span>',
     		'parent'=> false,
     		'href' => admin_url('options-general.php?page=math-captcha&tab=logs'),
     	));
@@ -323,5 +324,6 @@ function Math_Captcha() {
 
 	return $instance;
 }
+
 
 Math_Captcha();
